@@ -33,9 +33,7 @@
 <!--            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's-->
 <!--&lt;!&ndash;                content.</p>&ndash;&gt;-->
 <!--            <a href="#" class="card-link">Card link</a>-->
-<!--            <a th:href="@{'/admin/panel/halls/' + ${el.getId()}}">Delete</a>-->
             <form th:action="@{'/admin/panel/halls/' + ${el.getId()}}" method="post">
-<!--                <input type="hidden" th:value="${el.id}" name="id">-->
                 <button class="btn-danger" type="submit">Delete</button>
             </form>
         </div>

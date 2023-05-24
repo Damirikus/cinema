@@ -9,11 +9,11 @@ import lombok.Setter;
 import java.util.Objects;
 
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Hall {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

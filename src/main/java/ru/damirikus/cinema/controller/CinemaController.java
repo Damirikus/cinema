@@ -1,24 +1,35 @@
 package ru.damirikus.cinema.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import ru.damirikus.cinema.model.Film;
 import ru.damirikus.cinema.model.Hall;
+import ru.damirikus.cinema.service.FilmService;
 import ru.damirikus.cinema.service.HallService;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin/panel")
 public class CinemaController {
 
-    private final HallService hallService;
+    @Value("${upload.path.posters}")
+    private String path;
 
-    public CinemaController(HallService hallService) {
+    private final HallService hallService;
+    private final FilmService filmService;
+
+    public CinemaController(HallService hallService, FilmService filmService) {
         this.hallService = hallService;
+        this.filmService = filmService;
     }
 
     @GetMapping("/halls")
@@ -37,8 +48,7 @@ public class CinemaController {
     }
 
     @PostMapping("/halls/{id}")
-    public String deleteHall(Model model,
-                             @PathVariable Long id){
+    public String deleteHall(Model model, @PathVariable Long id){
         System.out.println("ID = " + id);
         hallService.deleteHall(id);
         List<Hall> halls = hallService.getHalls();
@@ -48,8 +58,28 @@ public class CinemaController {
 
     @GetMapping("/films")
     public String getFilms(Model model){
-//        List<Film> halls = service.getHalls();
-//        model.addAttribute("halls", halls);
+        model.addAttribute("films", filmService.getFilms());
+        return "films";
+    }
+
+    @PostMapping("/films")
+    public String addFilm(Model model, Film film, @RequestParam("poster") MultipartFile file) throws IOException {
+        System.out.println("Film - " + film);
+
+
+        if (!Files.isDirectory(Paths.get(path))){
+            Files.createDirectory(Paths.get(path));
+        }
+
+        String result = UUID.randomUUID() + "." + file.getOriginalFilename();
+        film.setFilename(result);
+        file.transferTo(new File(path + "/" + result));
+
+        System.out.println("Film with filename - " + film);
+
+        Film addedFilm = filmService.createFilm(film);
+        System.out.println("Added file - " + addedFilm);
+        model.addAttribute("films", filmService.getFilms());
         return "films";
     }
 }
