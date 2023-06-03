@@ -5,10 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.damirikus.cinema.model.CinemaSession;
 import ru.damirikus.cinema.model.Film;
 import ru.damirikus.cinema.model.Hall;
 import ru.damirikus.cinema.service.FilmService;
 import ru.damirikus.cinema.service.HallService;
+import ru.damirikus.cinema.service.SessionService;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,10 +28,12 @@ public class CinemaController {
 
     private final HallService hallService;
     private final FilmService filmService;
+    private final SessionService sessionService;
 
-    public CinemaController(HallService hallService, FilmService filmService) {
+    public CinemaController(HallService hallService, FilmService filmService, SessionService sessionService) {
         this.hallService = hallService;
         this.filmService = filmService;
+        this.sessionService = sessionService;
     }
 
     @GetMapping("/halls")
@@ -63,7 +67,7 @@ public class CinemaController {
     }
 
     @PostMapping("/films")
-    public String addFilm(Model model, Film film, @RequestParam("poster") MultipartFile file) throws IOException {
+    public String addFilm(Film film, @RequestParam("poster") MultipartFile file) throws IOException {
         System.out.println("Film - " + film);
 
 
@@ -79,7 +83,23 @@ public class CinemaController {
 
         Film addedFilm = filmService.createFilm(film);
         System.out.println("Added file - " + addedFilm);
+        return "redirect:films";
+    }
+
+
+
+    @GetMapping("/sessions")
+    public String getSessions(Model model){
+        model.addAttribute("sessions", sessionService.getSessions());
         model.addAttribute("films", filmService.getFilms());
-        return "films";
+        model.addAttribute("halls", hallService.getHalls());
+        return "sessions";
+    }
+
+
+    @PostMapping("/sessions")
+    public String createSession(CinemaSession session){
+        sessionService.createSession(session);
+        return "redirect:sessions";
     }
 }

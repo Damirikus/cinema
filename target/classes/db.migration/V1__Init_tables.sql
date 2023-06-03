@@ -22,6 +22,11 @@ create table film_session (
     h_id int8 not null,
     f_id int8 not null,
     price float8 not null,
+    time timestamp not null,
     foreign key (h_id) references hall (id) ON DELETE CASCADE,
     foreign key (f_id) references film (id) ON DELETE CASCADE
 );
+
+
+ALTER SEQUENCE hall_seq RESTART WITH 1;
+UPDATE hall SET id=nextval('hall_seq');

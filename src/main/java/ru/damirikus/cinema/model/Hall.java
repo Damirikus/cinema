@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -21,6 +22,9 @@ public class Hall {
     private String name;
     @Column(name = "seats_num", nullable = false)
     private int seatsNumber;
+
+    @OneToMany(mappedBy = "hall", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<CinemaSession> sessionList;
 
     @Override
     public boolean equals(Object o) {

@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 
 @Entity
@@ -25,6 +27,8 @@ public class Film {
     private int age;
     private String filename;
     private String description;
+    @OneToMany(mappedBy = "film", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<CinemaSession> sessionList;
 
     @Override
     public boolean equals(Object o) {
