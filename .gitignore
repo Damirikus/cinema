@@ -29,3 +29,6 @@ replay_pid*
 /mvnw.cmd
 /.idea/
 /images/
+/target/
+/target/classes/
+/target/classes/db.migration/
