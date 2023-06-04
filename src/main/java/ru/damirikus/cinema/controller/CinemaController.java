@@ -94,24 +94,34 @@ public class CinemaController {
     @GetMapping("/sessions")
     public String getSessions(Model model) {
         model.addAttribute("sessions", sessionService.getSessions());
-        model.addAttribute("films", filmService.getFilms());
-        model.addAttribute("halls", hallService.getHalls());
         return "sessions";
     }
 
+    @GetMapping("/sessions/create")
+    public String createSession(Model model){
+        model.addAttribute("films", filmService.getFilms());
+        model.addAttribute("halls", hallService.getHalls());
+        return "new-session";
+    }
 
-    @PostMapping("/sessions")
+    @PostMapping("/sessions/create")
     public String createSession(CinemaSession session,
                                 @RequestParam("id_h") Hall hall,
                                 @RequestParam String title,
                                 @RequestParam("time_")LocalTime time
-                                ) {
+    ) {
 
         session.setHall(hall);
         session.setFilm(filmService.getFilmByTitle(title));
         session.setTime(LocalDateTime.of(LocalDate.now(), time));
 
         sessionService.createSession(session);
-        return "redirect:sessions";
+        return "redirect:/admin/panel/sessions";
+    }
+
+    @GetMapping("/sessions/{id}")
+    public String getSession(@PathVariable("id") CinemaSession session, Model model){
+        model.addAttribute("session", session);
+        return "session-page";
     }
 }
