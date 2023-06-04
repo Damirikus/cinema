@@ -30,3 +30,6 @@ create table film_session (
 
 ALTER SEQUENCE hall_seq RESTART WITH 1;
 UPDATE hall SET id=nextval('hall_seq');
+
+ALTER SEQUENCE film_seq RESTART WITH 1;
+UPDATE film SET id=nextval('film_seq');

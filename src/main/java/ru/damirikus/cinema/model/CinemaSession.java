@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @Entity(name = "film_session")
@@ -16,6 +17,7 @@ import java.util.Objects;
 @AllArgsConstructor
 public class CinemaSession {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
     private Double price;
@@ -47,6 +49,7 @@ public class CinemaSession {
         return "CinemaSession{" +
                 "id=" + id +
                 ", price=" + price +
+                ", time=" + time +
                 ", film=" + film +
                 ", hall=" + hall +
                 '}';

@@ -15,15 +15,25 @@
 <div class="container mt-5">
     <h1>Create new film</h1>
     <form th:action="@{/admin/panel/sessions}" method="post" enctype="multipart/form-data">
-        <input type="text" name="title" placeholder="Entry title">
+        <input type="number" name="price" min="1" step="any" placeholder="Entry price" required>
         <br/>
-        <input type="text" name="description" placeholder="Entry description">
         <br/>
-        <input type="number" min="0" max="18" name="age" placeholder="Enter age restriction">
+        <input type="time" name="time_" required>
         <br/>
-        <input type="number" min="1600" max="2023" name="year" placeholder="Enter year of release">
         <br/>
-        <input type="file" name="poster" class="form-control">
+        <h4>Select movie</h4>
+        <select name="title"  class="form-select" aria-label="Default select example">
+            <div th:each="el : ${films}">
+                <option selected th:text="${el.getTitle()}">Open this select menu</option>
+            </div>
+        </select>
+        <br/>
+        <h4>Select hall</h4>
+        <select name="id_h" class="form-select" aria-label="Default select example">
+            <div th:each="el : ${halls}">
+                <option selected th:text="${el.getId()}">Open this select menu</option>
+            </div>
+        </select>
         <br/>
         <button type="submit" class="btn btn-success">Add</button>
     </form>
@@ -40,7 +50,8 @@
         </div>
         <div class="movie__content">
             <div class="movie__title">
-                <h1 class="heading__primary" th:text="${el.getFilm().getTitle()}">First Blood Part II <i class="fas fa-fire"></i></h1>
+                <h1 class="heading__primary" th:text="${el.getFilm().getTitle()}">First Blood Part II <i
+                        class="fas fa-fire"></i></h1>
                 <div class="movie__tag movie__tag--1">#action</div>
                 <div class="movie__tag movie__tag--2">#thriller</div>
             </div>
@@ -51,9 +62,11 @@
             <div class="movie__details">
                 <p class="movie__detail"><span class="icons icons-red"><i class="fas fa-camera-retro"></i> </span>Buzz
                     Feitshans</p>
-                <p class="movie__detail" th:text="${el.getTime()}"><span class="icons icons-grey"><i class="fas fa-clock"></i>
+                <p class="movie__detail" th:text="${el.getTime()}"><span class="icons icons-grey"><i
+                        class="fas fa-clock"></i>
                 </span>1h 33m</p>
-                <p class="movie__detail" th:text="${el.getPrice()} + '$'"><span class="icons icons-yellow"><i class="fas fa-file-invoice-dollar"></i>
+                <p class="movie__detail" th:text="${el.getPrice()} + '$'"><span class="icons icons-yellow"><i
+                        class="fas fa-file-invoice-dollar"></i>
         </span>$12.52 crores</p>
             </div>
         </div>

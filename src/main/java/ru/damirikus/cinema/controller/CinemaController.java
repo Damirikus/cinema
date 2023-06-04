@@ -16,7 +16,11 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Controller
@@ -37,14 +41,14 @@ public class CinemaController {
     }
 
     @GetMapping("/halls")
-    public String getHallList(Model model){
+    public String getHallList(Model model) {
         List<Hall> halls = hallService.getHalls();
         model.addAttribute("halls", halls);
         return "halls";
     }
 
     @PostMapping("/halls")
-    public String addHall(Model model, Hall hall){
+    public String addHall(Model model, Hall hall) {
         hallService.createHall(hall);
         List<Hall> halls = hallService.getHalls();
         model.addAttribute("halls", halls);
@@ -52,7 +56,7 @@ public class CinemaController {
     }
 
     @PostMapping("/halls/{id}")
-    public String deleteHall(Model model, @PathVariable Long id){
+    public String deleteHall(Model model, @PathVariable Long id) {
         System.out.println("ID = " + id);
         hallService.deleteHall(id);
         List<Hall> halls = hallService.getHalls();
@@ -61,7 +65,7 @@ public class CinemaController {
     }
 
     @GetMapping("/films")
-    public String getFilms(Model model){
+    public String getFilms(Model model) {
         model.addAttribute("films", filmService.getFilms());
         return "films";
     }
@@ -71,7 +75,7 @@ public class CinemaController {
         System.out.println("Film - " + film);
 
 
-        if (!Files.isDirectory(Paths.get(path))){
+        if (!Files.isDirectory(Paths.get(path))) {
             Files.createDirectory(Paths.get(path));
         }
 
@@ -87,9 +91,8 @@ public class CinemaController {
     }
 
 
-
     @GetMapping("/sessions")
-    public String getSessions(Model model){
+    public String getSessions(Model model) {
         model.addAttribute("sessions", sessionService.getSessions());
         model.addAttribute("films", filmService.getFilms());
         model.addAttribute("halls", hallService.getHalls());
@@ -98,7 +101,16 @@ public class CinemaController {
 
 
     @PostMapping("/sessions")
-    public String createSession(CinemaSession session){
+    public String createSession(CinemaSession session,
+                                @RequestParam("id_h") Hall hall,
+                                @RequestParam String title,
+                                @RequestParam("time_")LocalTime time
+                                ) {
+
+        session.setHall(hall);
+        session.setFilm(filmService.getFilmByTitle(title));
+        session.setTime(LocalDateTime.of(LocalDate.now(), time));
+
         sessionService.createSession(session);
         return "redirect:sessions";
     }

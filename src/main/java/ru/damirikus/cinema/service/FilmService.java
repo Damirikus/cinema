@@ -11,5 +11,7 @@ public interface FilmService {
 
     Film createFilm(Film film);
 
+    Film getFilmByTitle(String title);
+
     void deleteFilm(Long id);
 }
